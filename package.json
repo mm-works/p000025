@@ -14,7 +14,7 @@
 		"schedule-ts": "tsc -p ./schedule.json",
 		"dev-schedule": "yarn schedule-watch-ts & cross-env NODE_ENV=development mm-schedule",
 		"dev": "next dev",
-		"build": "next build && yarn schedule-ts",
+		"build": "next build",
 		"start": "next start"
 	},
 	"lint-staged": {
