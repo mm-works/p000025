@@ -24,6 +24,7 @@
 	},
 	"dependencies": {
 		"@geist-ui/react": "^2.1.0-canary.2",
+		"@mmstudio/an000039": "^1.1.1",
 		"@mmstudio/an000042": "^1.0.0",
 		"@mmstudio/an000049": "^1.1.0",
 		"@mmstudio/an000050": "^1.0.0",
