@@ -23,7 +23,8 @@
 		]
 	},
 	"dependencies": {
-		"@geist-ui/react": "^2.1.0-canary.2",
+		"@geist-ui/react": "^2.1.3",
+		"@geist-ui/react-icons": "^1.0.1",
 		"@mmstudio/an000039": "^1.1.1",
 		"@mmstudio/an000042": "^1.0.0",
 		"@mmstudio/an000049": "^1.1.0",
@@ -31,6 +32,7 @@
 		"@mmstudio/schedule": "^2.0.2",
 		"anylogger": "^1.0.9",
 		"anylogger-log4js": "^0.2.0",
+		"caniuse-lite": "^1.0.30001198",
 		"cross-env": "^7.0.3",
 		"log4js": "^6.3.0",
 		"next": "10.0.3",
