@@ -1,5 +1,6 @@
 import { GetStaticProps, NextPage, PageConfig } from 'next';
 import Head from 'next/head';
+import an49 from '@mmstudio/an000049';
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import { Autoplay, Swiper as Core, EffectCoverflow, Keyboard } from 'swiper';
@@ -8,12 +9,14 @@ import Header from '../components/c003';
 import 'swiper/swiper.min.css';
 
 interface IProps {
+	dt1: Pick<ITbcarousel_map, 'picture_name' | 'picture_address' | 'associated_num'>[];
+	dt2: Pick<ITbcompany_profile, 'compony_profile_id' | 'compony_profile_content'>[];
 }
 
 /**
  * 公司简介
  */
-const page: NextPage<IProps> = () => {
+const page: NextPage<IProps> = ({ dt1, dt2 }) => {
 	return (
 		<>
 			<Head>
@@ -33,10 +36,36 @@ export const config: PageConfig = {
 export default page;
 
 export const getStaticProps: GetStaticProps<IProps> = async () => {
-	return Promise.resolve({
-		props: {},
-		revalidate: 60 * 60 * 24 // 1 day
+	const db = an49();
+
+	// 轮播图
+	const tb1 = db<ITbcarousel_map>('carousel_map');
+	const r1 = await tb1.select('picture_name', 'picture_address', 'associated_num').where({
+		is_show: 1,
+		check_state: 200
+	}).orderBy('picture_order', 'asc');
+
+	const dt1 = r1.map((r) => {
+		return { ...r };
 	});
+
+	// 公司简介2
+	const tb2 = db<ITbcompany_profile>('company_profile');
+	const r2 = await tb2.select('compony_profile_id', 'compony_profile_content').where({
+		is_show: 1,
+		check_state: 200
+	}).orderBy('update_time', 'desc').limit(199);
+	const dt2 = r2.map((r) => {
+		return { ...r };
+	});
+	console.log(dt2);
+	return {
+		props: {
+			dt1,
+			dt2
+		},
+		revalidate: 60 * 60 * 24 // 1 day
+	};
 };
 
 /**

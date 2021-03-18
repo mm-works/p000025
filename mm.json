@@ -4,26 +4,19 @@
 	"minio": {
 		"endPoint": "127.0.0.1",
 		"port": 9000,
-		"accessKey": "mmstudio",
-		"secretKey": "Mmstudio123",
+		"accessKey": "01factory",
+		"secretKey": "01factory",
 		"useSSL": false,
 		"region": "cn-north-1",
 		"partSize": 5242880
 	},
-	"email": {
-		"secret": "Mmstudio123",
-		"baseurl": "http://localhost:8889",
-		"maxage": 60,
-		"server": "smtp://tao_qiufeng:bqrtomtd1983@smtp.126.com:25",
-		"from": "tao_qiufeng@126.com"
-	},
 	"session": {
-		"secret": "Mmstudio123",
+		"secret": "01factory",
 		"expiresIn": "30d"
 	},
 	"dbconfig": {
-		"client": "pg",
-		"connection": "postgres://mmstudio:Mmstudio123@127.0.0.1:5432/db002",
+		"client": "mysql2",
+		"connection": "postgres://01factory:01factory@127.0.0.1:3306/01factory",
 		"pool": {
 			"min": 0,
 			"max": 7
