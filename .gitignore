@@ -37,3 +37,4 @@ logs/
 *.lock
 dist/
 data/
+*.7z
