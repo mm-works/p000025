@@ -15,8 +15,8 @@
 		"expiresIn": "30d"
 	},
 	"dbconfig": {
-		"client": "mysql2",
-		"connection": "postgres://01factory:01factory@127.0.0.1:3306/01factory",
+		"client": "mysql",
+		"connection": "mysql://01factory:01factory@127.0.0.1:3306/01factory",
 		"pool": {
 			"min": 0,
 			"max": 7

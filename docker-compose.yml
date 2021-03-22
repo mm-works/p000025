@@ -14,19 +14,6 @@ services:
       MYSQL_ROOT_PASSWORD: 01factory
     ports:
       - 3306:3306
-
-  postgres:
-    image: postgres
-    container_name: postgres
-    volumes:
-      - ./data/postgre:/var/lib/postgresql/data
-    restart: always
-    environment:
-      POSTGRES_DB: 01factory
-      POSTGRES_USER: 01factory
-      POSTGRES_PASSWORD: 01factory
-    ports:
-      - 5432:5432
   adminer:
     container_name: adminer
     image: adminer
