@@ -8,15 +8,76 @@ import SwiperCore, { Autoplay, EffectCoverflow, Keyboard } from 'swiper/core';
 import Header from '../components/c003';
 import 'swiper/swiper.min.css';
 
+interface ITb5 {
+	check_state: number;
+	business_comp_id: string;
+	picture_address: string;
+	cont_des: string;
+	picture_order: number;
+	update_time: number;
+	associated_num: string;
+}
+
+interface ITb7 {
+	culture_type_num: string;
+	check_state: string;
+	is_show: string;
+	culture_type_name: string;
+	culture_content: string;
+	picture_address: string;
+	update_time: number;
+}
+
 interface IProps {
 	dt1: Pick<ITbcarousel_map, 'picture_name' | 'picture_address' | 'associated_num'>[];
 	dt2: Pick<ITbcompany_profile, 'compony_profile_id' | 'compony_profile_content'>[];
+	dt3: {
+		deptid: string;
+		deptname: string;
+		productid: string;
+		dept_duties: string;
+		parent_deptid: string;
+		parent_deptname: string;
+		dept_principal_name: string;
+		dept_principal_no: string;
+		dept_describe: string;
+	}[];
+	dt4: {
+		dept_describe: string;
+		dept_duties: string;
+		deptid: string;
+		headimg: string;
+		staff_name: string;
+		deptname: string;
+		productid: string;
+	}[];
+	dt5: {
+		check_state: number;
+		business_comp_id: string;
+		picture_address: string;
+		cont_des: string;
+		picture_order: number;
+		update_time: number;
+		associated_num: string;
+	}[];
+	dt6: {
+		org_structure: string;
+	}[];
+	dt7: {
+		culture_type_num: string;
+		check_state: string;
+		is_show: string;
+		culture_type_name: string;
+		culture_content: string;
+		picture_address: string;
+		update_time: number;
+	}[];
 }
 
 /**
  * 公司简介
  */
-const page: NextPage<IProps> = ({ dt1, dt2 }) => {
+const page: NextPage<IProps> = ({ dt1, dt2, dt3, dt4, dt5, dt6, dt7 }) => {
 	return (
 		<>
 			<Head>
@@ -58,11 +119,60 @@ export const getStaticProps: GetStaticProps<IProps> = async () => {
 	const dt2 = r2.map((r) => {
 		return { ...r };
 	});
-	console.log(dt2);
+
+	// 部门信息3
+	const tb3 = db<ITbdept_info>('dept_info');
+	const r3 = await tb3.select('deptid', 'deptname', 'dept_duties', 'parent_deptid', 'parent_deptname', 'dept_principal_name', 'dept_principal_no', 'productid', 'dept_describe');
+	const dt3 = r3.map((r) => {
+		return { ...r };
+	});
+
+	// 员工基本信息
+	const tb4 = db<ITbemp_information>('emp_information');
+	const r4 = await tb4.select('deptid', 'headimg', 'staff_name', 'deptname', 'productid');
+	const tmp4 = r4.map((r) => {
+		return { ...r };
+	});
+	const dt4 = tmp4.map((i) => {
+		const t = dt3.filter((it) => {
+			return it.deptid === i.deptid;
+		});
+		const { dept_describe, dept_duties } = t[0] || { dept_describe: '', dept_duties: '' };
+		return {
+			...i,
+			dept_describe,
+			dept_duties
+		};
+	});
+
+	// 业务构成4
+	const [r5] = await db.raw<[ITb5[]]>(`select b.check_state,b.business_comp_id,b.picture_address,b.cont_des,b.picture_order,b.update_time,b.associated_num
+		 from business_composition b, (select associated_num,max(update_time) as update_time from business_composition where is_show=1 and check_state=200 group by associated_num) t where t.associated_num=b.associated_num and t.update_time=b.update_time and b.is_show=1 and b.check_state=200 order by b.business_comp_id asc`);
+	console.log('1111111111111111111', r5);
+	const dt5 = r5.map((r) => {
+		return { ...r };
+	});
+
+	//  组织架构
+	const tb6 = db<ITbcompany>('company');
+	const r6 = await tb6.select('org_structure');
+	const dt6 = r6.map((r) => {
+		return { ...r };
+	});
+	const sql = 'select c.culture_type_num,c.check_state,c.is_show,c.culture_type_name,c.culture_content,c.picture_address,c.update_time from (select culture_type_num,max(update_time) as update_time from company_culture where is_show=1 and check_state=200 group by culture_type_num) as t LEFT JOIN company_culture as c on t.culture_type_num=c.culture_type_num and t.update_time=c.update_time where c.is_show=1 and c.check_state=200 and c.culture_type_num in (select culture_type_num from company_culture_type) order by convert(culture_type_name using gbk) desc';
+	const [r7] = await db.raw<[ITb7[]]>(sql);
+	const dt7 = r7.map((r) => {
+		return { ...r };
+	});
 	return {
 		props: {
 			dt1,
-			dt2
+			dt2,
+			dt3,
+			dt4,
+			dt5,
+			dt6,
+			dt7
 		},
 		revalidate: 60 * 60 * 24 // 1 day
 	};
