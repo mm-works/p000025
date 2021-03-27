@@ -80,7 +80,7 @@ function C002() {
  */
 function C003() {
 	return <>
-		<div className="display--">
+		<div className="display0--">
 
 			<div className="bg-f display">
 
